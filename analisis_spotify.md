@@ -285,3 +285,72 @@ Se asignan nombres más claros y descriptivos en español para las columnas
 ### Paso 8 - `print(top_followed_artists)`
 
 Imprime la tabla final con los 10 artistas con mayor número de seguidores.
+
+## Pregunta 4: ¿Qué tipo de álbum tiene canciones más populares?
+
+### Objetivo: Analizar si el tipo de álbum influye en la popularidad de las canciones dentro del dataset.
+
+En Spotify, una canción puede pertenecer a distintos tipos de lanzamiento, por ejemplo:
+
+album → álbum completo
+
+single → lanzamiento individual
+
+compilation → recopilación
+
+### Codigo
+
+``
+album_popularity = (
+    spotifyData.groupby('album_type')['track_popularity']
+    .agg(['mean','count'])
+    .sort_values(by='mean', ascending=False)
+    .reset_index()
+)
+
+album_popularity.columns = ['Tipo de Álbum', 'Popularidad Promedio', 'Cantidad de Canciones']
+album_popularity['Popularidad Promedio'] = album_popularity['Popularidad Promedio'].round(2)
+
+print(album_popularity)
+``
+
+### Explicacion paso a paso 
+
+### Paso 1 - `groupby('album_type')`
+
+Agrupa todas las filas del dataframe según el valor de la columna album_type.
+
+### Paso 2 - `track_popularity`
+
+Selecciona únicamente la columna track_popularity dentro de cada grupo.
+Esto permite trabajar exclusivamente con los valores de popularidad de las canciones, ignorando el resto de columnas del dataset.
+
+### Paso 3 - `.agg(['mean','count'])`
+
+Aplica dos funciones de agregación simultáneamente a cada grupo:
+mean
+Calcula el promedio de popularidad
+count
+Cuenta cuántas canciones hay en ese tipo de álbum
+
+### Paso 4 - `.sort_values(by='mean', ascending=False)`
+
+Ordena los resultados según la columna mean (popularidad promedio).
+
+### Paso 5 - `.reset_index()`
+
+Después de groupby, el valor de album_type queda como índice del dataframe.
+
+Este método lo convierte nuevamente en una columna normal, lo que facilita la lectura del resultado.
+
+### Paso 6 - `album_popularity.columns = ['Tipo de Álbum', 'Popularidad Promedio', 'Cantidad de Canciones']`
+
+Se reemplazan los nombres originales por nombres más claros en español
+
+### Paso 7 - `album_popularity['Popularidad Promedio'] = album_popularity['Popularidad Promedio'].round(2)`
+
+Redondea los valores de popularidad promedio a 2 decimales para mejorar la presentación.
+
+### Paso 8 - `print(album_popularity)`
+
+Imprime la tabla final con los resultados del análisis.
