@@ -228,3 +228,60 @@ Agrupar por explícita → Seleccionar popularidad → Agregar (promedio + conte
 | Función de agregación | `.mean()` | `.agg(['mean', 'count'])` |
 | Propósito | Ranking / Top N | Comparación entre dos grupos |
 | Resultado | Tabla con 10 filas | Tabla con 2 filas |
+
+
+## pregunta 3: ¿Cuáles son los 10 artistas con mayor número de seguidores en Spotify?
+
+
+### Objetivo: Identificar cuáles son los artistas con mayor cantidad de seguidores dentro del dataset. Esto permite reconocer qué artistas tienen la base de fans más grande, independientemente de la popularidad específica de cada canción.
+
+
+### Codigo 
+top_followed_artists = (
+    spotifyData.groupby('artist_name')['artist_followers']
+    .max()
+    .sort_values(ascending=False)
+    .head(10)
+    .reset_index()
+)
+
+top_followed_artists.columns = ['Artista', 'Seguidores']
+print(top_followed_artists)
+
+
+### Explicacion paso a paso
+
+### Paso 1 -`groupby('artist_name')`
+
+Agrupa todas las filas del dataframe según el nombre del artista.
+
+### Paso 2 - `['artist_followers']`
+
+Selecciona únicamente la columna artist_followers dentro de cada grupo, que es la que columna contiene el número de seguidores que tiene el artista en Spotify.
+
+### Paso 3 - `.max()`
+
+Obtiene el valor máximo de seguidores para cada artista dentro de su grupo.
+Esto se utiliza porque el número de seguidores puede aparecer repetido en varias filas (una por canción). Tomar el máximo asegura que se conserve el valor real más alto registrado para ese artista.
+
+### Paso 4 -`.sort_values(ascending=False)`
+
+Ordena los resultados de mayor a menor según la cantidad de seguidores.
+De esta manera, los artistas con más seguidores aparecerán primero en la lista.
+
+### Paso 5 - `.head(10)`
+
+Selecciona únicamente los primeros 10 artistas después de ordenar los datos.
+
+### Paso 6 - `.reset_index()`
+
+Después de usar groupby, el nombre del artista queda como índice del dataframe.
+reset_index() convierte ese índice nuevamente en una columna normal, lo que facilita la lectura y manipulación de los datos.
+
+### Paso 7 - `top_followed_artists.columns = ['Artista', 'Seguidores']`
+
+Se asignan nombres más claros y descriptivos en español para las columnas
+
+### Paso 8 - `print(top_followed_artists)`
+
+Imprime la tabla final con los 10 artistas con mayor número de seguidores.
