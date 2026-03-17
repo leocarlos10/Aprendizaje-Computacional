@@ -136,6 +136,7 @@ Comparar la popularidad promedio entre canciones marcadas como explícitas (`exp
 explicit_comparison = (
     spotifyData.groupby('explicit')['track_popularity']
     .agg(['mean', 'count'])
+    .sort_values(by='mean', ascending=false)
     .reset_index()
 )
 explicit_comparison.columns = ['Explícita', 'Popularidad Promedio', 'Cantidad de canciones']
@@ -173,7 +174,16 @@ Aplica **dos funciones de agregación** al mismo tiempo sobre cada grupo:
 
 ---
 
-#### Paso 4 — `.reset_index()`
+### paso 4 - `.sort_values(by='mean', asceding=false)`
+
+```python
+.sort_values(by='mean', ascending=false)
+```
+ordena los valores finales por promedio y de mayor a menor
+
+---
+
+#### Paso 5 — `.reset_index()`
 ```python
 .reset_index()
 ```
